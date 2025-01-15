@@ -1,0 +1,28 @@
+
+name: App With Github Actions with ArgoCD Basic
+on:
+  # workflow_dispatch
+  push
+
+jobs:
+  arcocd:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        repository: 
+        ref: main
+        token: ${{ secrets.TOKEN }}
+        
+    - name: Set up Image
+      run: |
+        sed -i "s%image: nginx:1.25%image: nginx:latest%" ./argocd-deployment.yaml
+        
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "peekaboo32@naver.com"
+        git config --local user.name "SUJINJEONG012"
+        git add .
+        git commit -m "Update nginx image to latest"
+        git push
